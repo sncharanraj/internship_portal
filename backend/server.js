@@ -224,6 +224,27 @@ app.use((err, req, res, next) => {
   });
 });
 
+// CORS Configuration - Allow all Vercel deployments
+app.use(cors({
+  origin: function (origin, callback) {
+    // Allow requests with no origin (mobile apps, Postman, curl)
+    if (!origin) return callback(null, true);
+    
+    // Allow localhost for development
+    if (origin.includes('localhost')) return callback(null, true);
+    
+    // Allow any vercel.app domain
+    if (origin.includes('vercel.app')) return callback(null, true);
+    
+    // Allow configured frontend URL
+    if (origin === process.env.FRONTEND_URL) return callback(null, true);
+    
+    // Reject other origins
+    callback(new Error('Not allowed by CORS'));
+  },
+  credentials: true
+}));
+
 // Start Server
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
