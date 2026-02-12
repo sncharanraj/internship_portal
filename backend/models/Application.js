@@ -1,100 +1,104 @@
 const mongoose = require('mongoose');
 
 const applicationSchema = new mongoose.Schema({
-applicationId: {
+  applicationId: {
     type: String,
-    unique: true
+    unique: true,
+    sparse: true
   },
   // Personal Information
   fullName: {
     type: String,
-    required: [true, 'Full name is required'],
-    trim: true,
-    minlength: [2, 'Name must be at least 2 characters'],
-    maxlength: [100, 'Name cannot exceed 100 characters']
+    required: true,
+    trim: true
   },
   email: {
     type: String,
-    required: [true, 'Email is required'],
+    required: true,
+    unique: true,
     lowercase: true,
-    trim: true,
-    match: [/^\S+@\S+\.\S+$/, 'Please provide a valid email address']
+    trim: true
   },
   phone: {
     type: String,
-    required: [true, 'Phone number is required'],
-    match: [/^[0-9]{10}$/, 'Please provide a valid 10-digit phone number']
+    required: true
   },
   
   // Educational Information
   university: {
     type: String,
-    required: [true, 'University name is required'],
+    required: true,
     trim: true
   },
   degree: {
     type: String,
-    required: [true, 'Degree is required'],
+    required: true,
     trim: true
   },
   major: {
     type: String,
-    required: [true, 'Major/Specialization is required'],
+    required: true,
     trim: true
   },
   graduationYear: {
     type: Number,
-    required: [true, 'Expected graduation year is required'],
-    min: [2024, 'Graduation year must be 2024 or later'],
-    max: [2030, 'Graduation year must be before 2030']
+    required: true
   },
   cgpa: {
     type: Number,
-    required: [true, 'CGPA is required'],
-    min: [0, 'CGPA must be between 0 and 10'],
-    max: [10, 'CGPA must be between 0 and 10']
+    required: true
   },
   
-  // Internship Details
+  // Internship Preferences
   preferredDomain: {
     type: String,
-    required: [true, 'Preferred domain is required'],
+    required: true,
     enum: ['Web Development', 'Mobile Development', 'Data Science', 'Machine Learning', 'DevOps', 'Cloud Computing', 'Cybersecurity', 'UI/UX Design', 'Other']
   },
   skills: {
     type: [String],
-    required: [true, 'At least one skill is required'],
+    required: true,
     validate: {
       validator: function(v) {
         return v && v.length > 0;
       },
-      message: 'Please provide at least one skill'
+      message: 'At least one skill is required'
     }
   },
+  
+  // Optional Links
   resumeLink: {
     type: String,
     trim: true,
-    match: [/^https?:\/\/.+/, 'Please provide a valid URL for resume']
+    default: ''
   },
   githubProfile: {
     type: String,
-    trim: true
+    trim: true,
+    default: ''
   },
   linkedinProfile: {
     type: String,
-    trim: true
+    trim: true,
+    default: ''
   },
+  
+  // Cover Letter
   coverLetter: {
     type: String,
-    maxlength: [1000, 'Cover letter cannot exceed 1000 characters']
+    trim: true,
+    maxlength: 1000,
+    default: ''
   },
   
   // Application Status
   status: {
     type: String,
-    enum: ['pending', 'reviewed', 'accepted', 'rejected'],
+    enum: ['pending', 'accepted', 'rejected'],
     default: 'pending'
   },
+  
+  // Timestamps
   submittedAt: {
     type: Date,
     default: Date.now
@@ -103,11 +107,13 @@ applicationId: {
   timestamps: true
 });
 
-// Index for faster queries
+// Indexes
 applicationSchema.index({ email: 1 });
+applicationSchema.index({ status: 1 });
 applicationSchema.index({ submittedAt: -1 });
+applicationSchema.index({ applicationId: 1 });
 
-// Auto-increment counter schema
+// Counter schema for auto-incrementing application IDs
 const counterSchema = new mongoose.Schema({
   _id: { type: String, required: true },
   seq: { type: Number, default: 0 }
@@ -117,7 +123,7 @@ const Counter = mongoose.model('Counter', counterSchema);
 
 // Pre-save hook to generate custom application ID
 applicationSchema.pre('save', async function(next) {
-  if (this.isNew) {
+  if (this.isNew && !this.applicationId) {
     try {
       const year = new Date().getFullYear();
       const counter = await Counter.findByIdAndUpdate(
