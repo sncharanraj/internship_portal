@@ -1,15 +1,24 @@
 # 🎓 Internship Application Portal
 
-A full-stack web application for managing internship applications with email notifications and a clean, interactive UI.
+![Build Status](https://github.com/sncharanraj/internship_portal/workflows/CI%2FCD%20Pipeline/badge.svg)
+![MongoDB](https://img.shields.io/badge/MongoDB-Atlas-green)
+![Render](https://img.shields.io/badge/Deploy-Render-blue)
+![Vercel](https://img.shields.io/badge/Deploy-Vercel-black)
 
-## 📋 Features
+> Full-stack internship application portal with automated email notifications
 
-- ✅ **Interactive Form** - Clean, modern UI built with React & Tailwind CSS
-- 📧 **Email Notifications** - Automatic emails to students and admin
-- 💾 **Database Storage** - MongoDB for scalable data storage
-- 🔒 **Validation** - Both client-side and server-side validation
-- 🚀 **Scalable** - Handles 1,000 to 100,000+ applications
-- 💰 **100% Free Tools** - All services used are free tier
+## 🚀 Live Demo
+- **Frontend:** https://internship-portal-himiau1vv-sncharanrajs-projects.vercel.app
+- **Backend API:** https://internship-portal-tzw8.onrender.com/api
+
+## ✨ Features
+- ✅ Real-time form validation
+- ✅ Email notifications (Student + Admin)
+- ✅ Professional application IDs
+- ✅ Mobile responsive
+- ✅ Rate limiting & security
+- ✅ MongoDB cloud storage
+- ✅ Auto-deploy CI/CD
 
 ## 🛠️ Tech Stack
 
