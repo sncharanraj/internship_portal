@@ -9,7 +9,6 @@ Sentry.init({
 });
 
 const express = require('express');
-// ... rest of imports
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
@@ -73,12 +72,28 @@ mongoose.connect(process.env.MONGODB_URI)
   });
 
 // Health Check Route
-app.get('/api/health', (req, res) => {
-  res.json({
+// Enhanced Health Check Route
+app.get('/api/health', async (req, res) => {
+  const healthcheck = {
     status: 'ok',
     message: 'Server is running',
-    timestamp: new Date().toISOString()
-  });
+    timestamp: new Date().toISOString(),
+    uptime: process.uptime(),
+    environment: process.env.NODE_ENV,
+    database: 'checking...'
+  };
+  
+  try {
+    // Check MongoDB connection
+    await mongoose.connection.db.admin().ping();
+    healthcheck.database = 'connected';
+  } catch (error) {
+    healthcheck.status = 'error';
+    healthcheck.database = 'disconnected';
+  }
+  
+  const statusCode = healthcheck.status === 'ok' ? 200 : 503;
+  res.status(statusCode).json(healthcheck);
 });
 
 // Validation Rules
