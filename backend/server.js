@@ -1,4 +1,6 @@
-require('dotenv').config();
+// Import Sentry FIRST - before anything else!
+require('./instrument');
+
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
@@ -7,11 +9,17 @@ const rateLimit = require('express-rate-limit');
 const { body, validationResult } = require('express-validator');
 const Application = require('./models/Application');
 const { sendStudentEmail, sendAdminEmail } = require('./services/emailService');
+const Sentry = require('@sentry/node'); // Import Sentry again for middleware
 
 const app = express();
-
 // Security Middleware
 app.use(helmet());
+
+// Sentry request handler - MUST be first middleware after helmet
+app.use(Sentry.Handlers.requestHandler());
+
+// Sentry performance tracking
+app.use(Sentry.Handlers.tracingHandler());
 
 // CORS Configuration - Allow all Vercel deployments
 app.use(cors({
@@ -226,6 +234,11 @@ app.get('/api/applications', async (req, res) => {
   }
 });
 
+app.get('/api/test-sentry', (req, res) => {
+  console.log('🧪 Triggering test error for Sentry');
+  throw new Error('🧪 Sentry Test Error - If you see this in Sentry dashboard, it works!');
+});
+
 // 404 Handler
 app.use('*', (req, res) => {
   res.status(404).json({
@@ -233,6 +246,8 @@ app.use('*', (req, res) => {
     message: 'Route not found'
   });
 });
+
+app.use(Sentry.Handlers.errorHandler());
 
 // Error Handler
 app.use((err, req, res, next) => {
