@@ -9,7 +9,6 @@ Sentry.init({
 });
 const logger = require('./middleware/logger');
 const express = require('express');
-const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const helmet = require('helmet');
@@ -254,6 +253,10 @@ app.get('/api/applications', async (req, res) => {
     });
   }
 });
+app.get('/api/test-error', (req, res) => {
+  console.log('🧪 Test error endpoint triggered');
+  throw new Error('🧪 Sentry Test Error - If you see this in Sentry, it works!');
+});
 
 // 404 Handler
 app.use('*', (req, res) => {
@@ -266,7 +269,10 @@ app.use('*', (req, res) => {
 // Error Handler
 app.use(Sentry.Handlers.errorHandler());
 app.use((err, req, res, next) => {
-  console.error('❌ Server error:', err);
+app.get('/api/test-error', (req, res) => {
+  console.log('🧪 Test error endpoint triggered');
+  throw new Error('🧪 Sentry Test Error - If you see this in Sentry, it works!');
+});  console.error('❌ Server error:', err);
   res.status(500).json({
     success: false,
     message: 'Internal server error'
