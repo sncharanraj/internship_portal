@@ -1,13 +1,4 @@
 require('dotenv').config();
-const Sentry = require("@sentry/node");
-
-// Initialize Sentry FIRST
-Sentry.init({
-  dsn: process.env.SENTRY_DSN,
-  environment: process.env.NODE_ENV || 'development',
-  tracesSampleRate: 1.0,
-});
-
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
@@ -21,10 +12,6 @@ const app = express();
 
 // Security Middleware
 app.use(helmet());
-
-// Sentry handlers - MUST be early in middleware chain
-app.use(Sentry.Handlers.requestHandler());
-app.use(Sentry.Handlers.tracingHandler());
 
 // CORS Configuration - Allow all Vercel deployments
 app.use(cors({
@@ -232,17 +219,11 @@ app.get('/api/applications', async (req, res) => {
     });
   } catch (error) {
     console.error('❌ Fetch applications error:', error);
-    res.status(false).json({
+    res.status(500).json({
       success: false,
       message: 'Failed to fetch applications'
     });
   }
-});
-
-// Test error endpoint for Sentry
-app.get('/api/test-error', (req, res) => {
-  console.log('🧪 Test error endpoint triggered');
-  throw new Error('🧪 Sentry Test Error - If you see this in Sentry, it works!');
 });
 
 // 404 Handler
@@ -253,10 +234,7 @@ app.use('*', (req, res) => {
   });
 });
 
-// Sentry error handler - MUST be before other error handlers
-app.use(Sentry.Handlers.errorHandler());
-
-// Your error handler
+// Error Handler
 app.use((err, req, res, next) => {
   console.error('❌ Server error:', err);
   res.status(500).json({
