@@ -107,11 +107,10 @@ const applicationSchema = new mongoose.Schema({
   timestamps: true
 });
 
-// Indexes
-applicationSchema.index({ email: 1 });
+// Indexes - Only add indexes NOT already defined with unique:true
+// email and applicationId already have unique indexes, so don't add them again!
 applicationSchema.index({ status: 1 });
 applicationSchema.index({ submittedAt: -1 });
-applicationSchema.index({ applicationId: 1 });
 
 // Counter schema for auto-incrementing application IDs
 const counterSchema = new mongoose.Schema({
