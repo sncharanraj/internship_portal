@@ -1,13 +1,13 @@
 require('dotenv').config();
 const Sentry = require("@sentry/node");
 
-// Initialize Sentry
+// Initialize Sentry FIRST
 Sentry.init({
   dsn: process.env.SENTRY_DSN,
   environment: process.env.NODE_ENV || 'development',
   tracesSampleRate: 1.0,
 });
-const logger = require('./middleware/logger');
+
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
@@ -22,33 +22,24 @@ const app = express();
 // Security Middleware
 app.use(helmet());
 
+// Sentry handlers - MUST be early in middleware chain
+app.use(Sentry.Handlers.requestHandler());
+app.use(Sentry.Handlers.tracingHandler());
+
 // CORS Configuration - Allow all Vercel deployments
 app.use(cors({
   origin: function (origin, callback) {
-    // Allow requests with no origin (mobile apps, Postman, curl)
     if (!origin) return callback(null, true);
-
-    // Allow localhost for development
     if (origin.includes('localhost')) return callback(null, true);
-
-    // Allow any vercel.app domain
     if (origin.includes('vercel.app')) return callback(null, true);
-
-    // Reject other origins
     console.log('❌ CORS blocked origin:', origin);
     callback(new Error('Not allowed by CORS'));
   },
   credentials: true
 }));
 
-// Sentry request handler - must be first middleware
-app.use(Sentry.Handlers.requestHandler());
-app.use(Sentry.Handlers.tracingHandler());
-
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
-
-app.use(logger);
 
 // Rate Limiting
 const limiter = rateLimit({
@@ -73,7 +64,6 @@ mongoose.connect(process.env.MONGODB_URI)
     process.exit(1);
   });
 
-// Health Check Route
 // Enhanced Health Check Route
 app.get('/api/health', async (req, res) => {
   const healthcheck = {
@@ -84,16 +74,15 @@ app.get('/api/health', async (req, res) => {
     environment: process.env.NODE_ENV,
     database: 'checking...'
   };
-  
+
   try {
-    // Check MongoDB connection
     await mongoose.connection.db.admin().ping();
     healthcheck.database = 'connected';
   } catch (error) {
     healthcheck.status = 'error';
     healthcheck.database = 'disconnected';
   }
-  
+
   const statusCode = healthcheck.status === 'ok' ? 200 : 503;
   res.status(statusCode).json(healthcheck);
 });
@@ -122,7 +111,6 @@ app.post('/api/applications', submitLimiter, applicationValidation, async (req, 
     console.log('📥 Received application submission');
     console.log('📋 Data:', JSON.stringify(req.body, null, 2));
 
-    // Check for validation errors
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       console.log('❌ Validation errors:', errors.array());
@@ -132,7 +120,6 @@ app.post('/api/applications', submitLimiter, applicationValidation, async (req, 
       });
     }
 
-    // Check for duplicate email
     const existingApplication = await Application.findOne({ email: req.body.email });
     if (existingApplication) {
       console.log('❌ Duplicate email:', req.body.email);
@@ -142,13 +129,11 @@ app.post('/api/applications', submitLimiter, applicationValidation, async (req, 
       });
     }
 
-    // Create new application
     const application = new Application(req.body);
     await application.save();
     console.log('✅ Application saved to database');
     console.log('📧 Application ID:', application._id);
 
-    // Send emails asynchronously
     console.log('📧 Starting email sending process...');
     console.log('📧 Student email:', application.email);
     console.log('📧 Admin email:', process.env.ADMIN_EMAIL);
@@ -247,12 +232,14 @@ app.get('/api/applications', async (req, res) => {
     });
   } catch (error) {
     console.error('❌ Fetch applications error:', error);
-    res.status(500).json({
+    res.status(false).json({
       success: false,
       message: 'Failed to fetch applications'
     });
   }
 });
+
+// Test error endpoint for Sentry
 app.get('/api/test-error', (req, res) => {
   console.log('🧪 Test error endpoint triggered');
   throw new Error('🧪 Sentry Test Error - If you see this in Sentry, it works!');
@@ -266,13 +253,12 @@ app.use('*', (req, res) => {
   });
 });
 
-// Error Handler
+// Sentry error handler - MUST be before other error handlers
 app.use(Sentry.Handlers.errorHandler());
+
+// Your error handler
 app.use((err, req, res, next) => {
-app.get('/api/test-error', (req, res) => {
-  console.log('🧪 Test error endpoint triggered');
-  throw new Error('🧪 Sentry Test Error - If you see this in Sentry, it works!');
-});  console.error('❌ Server error:', err);
+  console.error('❌ Server error:', err);
   res.status(500).json({
     success: false,
     message: 'Internal server error'
