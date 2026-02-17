@@ -1,94 +1,120 @@
 # 🎓 Internship Application Portal
 
-![Build Status](https://github.com/sncharanraj/internship_portal/workflows/CI%2FCD%20Pipeline/badge.svg)
-![MongoDB](https://img.shields.io/badge/MongoDB-Atlas-green)
-![Render](https://img.shields.io/badge/Deploy-Render-blue)
-![Vercel](https://img.shields.io/badge/Deploy-Vercel-black)
+[![Build Status](https://img.shields.io/badge/build-passing-brightgreen)]()
+[![MongoDB](https://img.shields.io/badge/MongoDB-Atlas-green)]()
+[![Deploy](https://img.shields.io/badge/deploy-Render-blue)]()
+[![Frontend](https://img.shields.io/badge/frontend-Vercel-black)]()
+[![License](https://img.shields.io/badge/license-MIT-blue)]()
 
-> Full-stack internship application portal with automated email notifications
+> A full-stack web application for managing internship applications with automated email notifications and cloud deployment.
 
-## 🚀 Live Demo
-- **Frontend:** https://internship-portal-himiau1vv-sncharanrajs-projects.vercel.app
+## 🌐 Live Demo
+
+- **Frontend:** https://internship-portal-p9lo-sncharanrajs-projects.vercel.app
 - **Backend API:** https://internship-portal-tzw8.onrender.com/api
+- **Health Check:** https://internship-portal-tzw8.onrender.com/api/health
+
+---
 
 ## ✨ Features
-- ✅ Real-time form validation
-- ✅ Email notifications (Student + Admin)
-- ✅ Professional application IDs
-- ✅ Mobile responsive
-- ✅ Rate limiting & security
-- ✅ MongoDB cloud storage
-- ✅ Auto-deploy CI/CD
+
+### Student Features
+- 📝 **Interactive Application Form** - Multi-field form with real-time validation
+- ✅ **Input Validation** - Client-side and server-side validation
+- 📧 **Email Confirmation** - Instant confirmation email upon submission
+- 🔢 **Application ID** - Professional application tracking ID (INT-2026-XXXX)
+- 📱 **Mobile Responsive** - Works perfectly on all devices
+- 🎨 **Modern UI** - Clean, professional interface with Tailwind CSS
+
+### Admin Features
+- 📬 **Email Notifications** - Detailed applicant information via email
+- 📊 **Application Statistics** - API endpoints for analytics
+- 🔍 **Application Search** - Filter and search capabilities
+- 📈 **Status Tracking** - Pending, accepted, rejected status management
+
+### Technical Features
+- 🔒 **Security** - Helmet.js, rate limiting, input sanitization
+- 🌐 **CORS** - Configured for cross-origin requests
+- 💾 **Database** - MongoDB Atlas cloud database
+- 📧 **Email Service** - Brevo API for reliable email delivery
+- 🚀 **Auto-Deploy** - GitHub Actions CI/CD pipeline
+- 📊 **Monitoring** - UptimeRobot for uptime monitoring
+- 🐳 **Dockerized** - Ready for containerized deployment
+
+---
+
+## 🏗️ Architecture
+
+```
+┌─────────────────────────────────────────────────┐
+│                    USERS                        │
+└─────────────────────┬───────────────────────────┘
+                      │
+        ┌─────────────┴─────────────┐
+        │                           │
+        ▼                           ▼
+┌───────────────┐           ┌───────────────┐
+│   FRONTEND    │           │   BACKEND     │
+│   (Vercel)    │◄─────────►│   (Render)    │
+│               │   HTTPS   │               │
+│  React/Vite   │           │  Node.js      │
+│  Tailwind CSS │           │  Express.js   │
+└───────────────┘           └───────┬───────┘
+                                    │
+                    ┌───────────────┼───────────────┐
+                    ▼               ▼               ▼
+            ┌──────────────┐ ┌──────────┐ ┌──────────────┐
+            │   MongoDB    │ │  Brevo   │ │    GitHub    │
+            │    Atlas     │ │   API    │ │  (CI/CD)     │
+            │  (Database)  │ │ (Emails) │ │              │
+            └──────────────┘ └──────────┘ └──────────────┘
+```
+
+---
 
 ## 🛠️ Tech Stack
 
 ### Frontend
-- **React 18** - UI library
-- **Vite** - Build tool
-- **Tailwind CSS** - Styling
-- **Axios** - HTTP client
-- **React Hot Toast** - Notifications
-- **Lucide React** - Icons
+- **Framework:** React 18
+- **Build Tool:** Vite
+- **Styling:** Tailwind CSS
+- **HTTP Client:** Axios
+- **Hosting:** Vercel
 
 ### Backend
-- **Node.js** - Runtime
-- **Express** - Web framework
-- **MongoDB** - Database
-- **Mongoose** - ODM
-- **Nodemailer** - Email service
-- **Express Validator** - Input validation
-- **Helmet** - Security
-- **Rate Limiting** - DDoS protection
+- **Runtime:** Node.js 18
+- **Framework:** Express.js
+- **Database:** MongoDB with Mongoose ODM
+- **Email:** Brevo API (@sendinblue/client)
+- **Security:** Helmet, CORS, express-rate-limit
+- **Validation:** express-validator
+- **Hosting:** Render
 
-## 📁 Project Structure
+### DevOps
+- **Version Control:** Git, GitHub
+- **CI/CD:** GitHub Actions
+- **Containerization:** Docker
+- **Monitoring:** UptimeRobot
+- **Deployment:** Automated via GitHub push
 
-```
-internship-portal/
-├── backend/
-│   ├── models/
-│   │   └── Application.js
-│   ├── services/
-│   │   └── emailService.js
-│   ├── server.js
-│   ├── package.json
-│   └── .env.example
-├── frontend/
-│   ├── src/
-│   │   ├── App.jsx
-│   │   ├── main.jsx
-│   │   └── index.css
-│   ├── index.html
-│   ├── package.json
-│   ├── vite.config.js
-│   ├── tailwind.config.js
-│   └── .env.example
-└── README.md
-```
+---
 
-## 🚀 Getting Started
+## 📦 Installation & Setup
 
 ### Prerequisites
-
 - Node.js 18+ installed
-- MongoDB Atlas account (free tier)
-- Gmail account for sending emails
+- MongoDB Atlas account
+- Brevo account (for emails)
+- Git installed
 
-### 1. MongoDB Setup
+### 1. Clone Repository
 
-1. Go to [MongoDB Atlas](https://www.mongodb.com/cloud/atlas)
-2. Create a free account and cluster
-3. Click "Connect" → "Connect your application"
-4. Copy the connection string
+```bash
+git clone https://github.com/YOUR-USERNAME/internship-portal.git
+cd internship-portal
+```
 
-### 2. Gmail Setup (for sending emails)
-
-1. Go to [Google Account Settings](https://myaccount.google.com/)
-2. Enable 2-Factor Authentication
-3. Go to Security → App Passwords
-4. Generate an app password for "Mail"
-5. Save this password for later
-
-### 3. Backend Setup
+### 2. Backend Setup
 
 ```bash
 cd backend
@@ -99,25 +125,31 @@ npm install
 # Create .env file
 cp .env.example .env
 
-# Edit .env and add your credentials:
-# - MONGODB_URI (from MongoDB Atlas)
-# - EMAIL_USER (your Gmail)
-# - EMAIL_PASS (app password from Gmail)
-# - ADMIN_EMAIL (where you want to receive notifications)
-
-# Start the server
-npm start
-
-# For development with auto-reload:
-npm run dev
+# Edit .env with your credentials
+nano .env
 ```
 
-The backend will run on `http://localhost:5000`
-
-### 4. Frontend Setup
+**Backend .env configuration:**
+```env
+MONGODB_URI=mongodb+srv://admin:PASSWORD@cluster.mongodb.net/internship-portal
+PORT=5000
+NODE_ENV=development
+BREVO_API_KEY=xkeysib-YOUR-API-KEY
+ADMIN_EMAIL=your-admin@email.com
+FRONTEND_URL=http://localhost:3000
+```
 
 ```bash
-cd frontend
+# Start backend server
+npm start
+
+# Server runs on http://localhost:5000
+```
+
+### 3. Frontend Setup
+
+```bash
+cd ../frontend
 
 # Install dependencies
 npm install
@@ -125,172 +157,364 @@ npm install
 # Create .env file
 cp .env.example .env
 
-# The default API URL is already set to http://localhost:5000/api
-# Change this if your backend runs on a different port
-
-# Start the development server
-npm run dev
+# Edit .env
+nano .env
 ```
 
-The frontend will run on `http://localhost:3000`
+**Frontend .env configuration:**
+```env
+VITE_API_URL=http://localhost:5000/api
+```
 
-## 🌐 Deployment (Free Options)
+```bash
+# Start development server
+npm run dev
 
-### Backend Deployment - Railway.app (Free)
+# Frontend runs on http://localhost:3000
+```
 
-1. Create account on [Railway.app](https://railway.app)
-2. Click "New Project" → "Deploy from GitHub"
-3. Select your repository
-4. Add environment variables in Railway dashboard:
-   - `MONGODB_URI`
-   - `EMAIL_USER`
-   - `EMAIL_PASS`
-   - `ADMIN_EMAIL`
-   - `FRONTEND_URL` (will be your Vercel URL)
-   - `NODE_ENV=production`
-5. Railway will auto-deploy your backend
+---
 
-**Alternative:** Render.com (also free)
+## 🚀 Deployment
 
-### Frontend Deployment - Vercel (Free)
+### Backend Deployment (Render)
 
-1. Create account on [Vercel](https://vercel.com)
-2. Click "New Project" → Import your repository
-3. Set root directory to `frontend`
-4. Add environment variable:
-   - `VITE_API_URL=https://your-railway-app.railway.app/api`
-5. Deploy!
+1. **Create Render Account:** https://render.com/
+2. **New Web Service** → Connect GitHub repo
+3. **Configure:**
+   - Root Directory: `backend`
+   - Build Command: `npm install`
+   - Start Command: `node server.js`
+   - Instance Type: Free
 
-**Alternative:** Netlify (also free)
+4. **Environment Variables:**
+   ```
+   MONGODB_URI=your-mongodb-uri
+   PORT=10000
+   NODE_ENV=production
+   BREVO_API_KEY=your-brevo-key
+   ADMIN_EMAIL=your-email
+   FRONTEND_URL=https://your-vercel-url.vercel.app
+   ```
 
-## 📧 Email Configuration
+5. **Deploy!** Render auto-deploys on every git push.
 
-The system sends two types of emails:
+### Frontend Deployment (Vercel)
 
-1. **Student Email** - Confirmation of application submission
-2. **Admin Email** - Detailed application information
+1. **Create Vercel Account:** https://vercel.com/
+2. **New Project** → Import from GitHub
+3. **Configure:**
+   - Root Directory: `frontend`
+   - Framework: Vite (auto-detected)
+   - Build Command: `npm run build`
+   - Output Directory: `dist`
 
-Make sure to:
-- Use a valid Gmail account
-- Generate an App Password (not your regular password)
-- Check spam folder initially
+4. **Environment Variables:**
+   ```
+   VITE_API_URL=https://your-render-url.onrender.com/api
+   ```
 
-## 🔐 Security Features
+5. **Deploy!** Vercel auto-deploys on every git push.
 
-- ✅ Rate limiting (5 applications per hour per IP)
-- ✅ Input validation and sanitization
-- ✅ Helmet.js for security headers
-- ✅ CORS protection
-- ✅ Email validation
-- ✅ Phone number validation
-- ✅ Duplicate application prevention
+---
 
-## 📊 API Endpoints
+## 📡 API Documentation
 
-### POST /api/applications
-Submit a new application
+### Base URL
+```
+Production: https://internship-portal-tzw8.onrender.com/api
+Development: http://localhost:5000/api
+```
+
+### Endpoints
+
+#### Health Check
+```http
+GET /api/health
+```
+
+**Response:**
+```json
+{
+  "status": "ok",
+  "message": "Server is running",
+  "timestamp": "2026-02-16T10:00:00.000Z",
+  "uptime": 3600,
+  "environment": "production",
+  "database": "connected"
+}
+```
+
+#### Submit Application
+```http
+POST /api/applications
+Content-Type: application/json
+```
 
 **Request Body:**
 ```json
 {
   "fullName": "John Doe",
   "email": "john@example.com",
-  "phone": "9876543210",
-  "university": "Stanford University",
+  "phone": "1234567890",
+  "university": "MIT",
   "degree": "B.Tech",
   "major": "Computer Science",
-  "graduationYear": 2025,
+  "graduationYear": 2026,
   "cgpa": 8.5,
   "preferredDomain": "Web Development",
   "skills": ["JavaScript", "React", "Node.js"],
-  "resumeLink": "https://drive.google.com/...",
+  "resumeLink": "https://example.com/resume.pdf",
   "githubProfile": "https://github.com/johndoe",
   "linkedinProfile": "https://linkedin.com/in/johndoe",
   "coverLetter": "I am passionate about..."
 }
 ```
 
-### GET /api/applications/stats
-Get application statistics (total, pending, accepted, rejected)
-
-### GET /api/applications
-Get all applications with pagination
-
-**Query Parameters:**
-- `page` (default: 1)
-- `limit` (default: 20)
-- `status` (optional: pending, accepted, rejected)
-
-### GET /api/health
-Health check endpoint
-
-## 🧪 Testing
-
-### Test Backend
-```bash
-curl http://localhost:5000/api/health
+**Response:**
+```json
+{
+  "success": true,
+  "message": "Application submitted successfully!",
+  "applicationId": "INT-2026-0001"
+}
 ```
 
-### Test Frontend
-Open browser: `http://localhost:3000`
+#### Get Application Statistics
+```http
+GET /api/applications/stats
+```
 
-### Test Email
-Submit a test application and check:
-1. Your email inbox (student confirmation)
-2. Admin email inbox (application details)
+**Response:**
+```json
+{
+  "success": true,
+  "stats": {
+    "total": 150,
+    "pending": 120,
+    "accepted": 25,
+    "rejected": 5
+  }
+}
+```
 
-## 📈 Scaling for 100,000+ Applications
+#### Get All Applications (Paginated)
+```http
+GET /api/applications?page=1&limit=20&status=pending
+```
 
-This architecture is designed to scale:
-
-- **MongoDB Atlas** - Can handle millions of documents
-- **Indexing** - Optimized queries with email and date indexes
-- **Rate Limiting** - Prevents abuse and DDoS
-- **Pagination** - Efficient data loading
-- **Async Operations** - Non-blocking email sending
-
-For extreme scale:
-- Upgrade to paid MongoDB tier
-- Add Redis for caching
-- Use message queue (RabbitMQ/Redis) for email processing
-- Deploy multiple backend instances with load balancer
-
-## 🐛 Troubleshooting
-
-### "Cannot connect to MongoDB"
-- Check your connection string in `.env`
-- Ensure IP address is whitelisted in MongoDB Atlas
-- Verify network connection
-
-### "Email not sending"
-- Verify Gmail App Password is correct
-- Check if 2FA is enabled
-- Look for errors in server console
-- Check spam folder
-
-### "CORS Error"
-- Ensure `FRONTEND_URL` in backend `.env` matches your frontend URL
-- In development: should be `http://localhost:3000`
-- In production: should be your Vercel URL
-
-### "Port already in use"
-- Change PORT in `.env` file
-- Kill the process using the port: `kill -9 $(lsof -ti:5000)`
-
-## 🤝 Contributing
-
-Feel free to fork, improve, and submit pull requests!
-
-## 📄 License
-
-MIT License - feel free to use this for your own projects!
-
-## 📞 Support
-
-For questions or issues:
-- Create an issue on GitHub
-- Email: support@example.com
+**Response:**
+```json
+{
+  "success": true,
+  "applications": [...],
+  "totalPages": 8,
+  "currentPage": 1,
+  "total": 150
+}
+```
 
 ---
 
-**Built with ❤️ for efficient internship management**
+## 🗄️ Database Schema
+
+### Application Model
+
+```javascript
+{
+  applicationId: String,        // INT-2026-0001 (auto-generated)
+  fullName: String,             // Required
+  email: String,                // Required, unique
+  phone: String,                // Required, 10 digits
+  university: String,           // Required
+  degree: String,               // Required
+  major: String,                // Required
+  graduationYear: Number,       // 2024-2030
+  cgpa: Number,                 // 0-10
+  preferredDomain: String,      // Enum
+  skills: [String],             // Array, min 1
+  resumeLink: String,           // Optional, URL
+  githubProfile: String,        // Optional, URL
+  linkedinProfile: String,      // Optional, URL
+  coverLetter: String,          // Optional, max 1000 chars
+  status: String,               // pending/accepted/rejected
+  submittedAt: Date,            // Auto-generated
+  createdAt: Date,              // Auto-generated
+  updatedAt: Date               // Auto-generated
+}
+```
+
+---
+
+## 🔒 Security Features
+
+- **Helmet.js** - Sets security HTTP headers
+- **Rate Limiting** - 5 applications per hour (production)
+- **Input Validation** - express-validator for all inputs
+- **CORS** - Configured for specific origins
+- **Email Validation** - Brevo sender verification
+- **MongoDB Injection Protection** - Mongoose sanitization
+- **Environment Variables** - Sensitive data not in code
+
+---
+
+## 📊 Monitoring & Observability
+
+### Uptime Monitoring (UptimeRobot)
+- **Backend:** Checks `/api/health` every 5 minutes
+- **Frontend:** Checks homepage every 5 minutes
+- **Alerts:** Email notifications on downtime
+
+### Logs
+- **Render:** Built-in logging dashboard
+- **Vercel:** Function logs and analytics
+- **MongoDB Atlas:** Database monitoring
+
+---
+
+## 🧪 Testing
+
+### Manual Testing Checklist
+
+**Frontend:**
+- [ ] Form validation works
+- [ ] All fields accept valid input
+- [ ] Error messages display correctly
+- [ ] Success message appears after submission
+- [ ] Mobile responsive design
+
+**Backend:**
+- [ ] Health check endpoint responds
+- [ ] Application submission works
+- [ ] Duplicate email validation works
+- [ ] Rate limiting functions
+- [ ] Emails are sent correctly
+
+**Integration:**
+- [ ] Frontend connects to backend
+- [ ] CORS allows requests
+- [ ] Database saves applications
+- [ ] Both emails (student & admin) delivered
+
+### API Testing with cURL
+
+```bash
+# Health check
+curl https://internship-portal-tzw8.onrender.com/api/health
+
+# Submit application
+curl -X POST https://internship-portal-tzw8.onrender.com/api/applications \
+  -H "Content-Type: application/json" \
+  -d '{
+    "fullName": "Test User",
+    "email": "test@example.com",
+    "phone": "1234567890",
+    "university": "Test University",
+    "degree": "B.Tech",
+    "major": "Computer Science",
+    "graduationYear": 2026,
+    "cgpa": 8.0,
+    "preferredDomain": "Web Development",
+    "skills": ["JavaScript"]
+  }'
+```
+
+---
+
+## 🐛 Troubleshooting
+
+### Common Issues
+
+**Issue:** Application submission fails with CORS error  
+**Solution:** Check `FRONTEND_URL` in Render matches your Vercel URL exactly (no trailing slash)
+
+**Issue:** Emails not being sent  
+**Solution:** Verify `BREVO_API_KEY` is set correctly and sender email is verified in Brevo
+
+**Issue:** MongoDB connection fails  
+**Solution:** Check `MONGODB_URI` is correct and IP whitelist includes `0.0.0.0/0` in Atlas
+
+**Issue:** Frontend shows "Network Error"  
+**Solution:** Verify `VITE_API_URL` in Vercel environment variables includes `/api` at end
+
+---
+
+## 📝 Maintenance Guide
+
+### Daily Tasks
+- Check UptimeRobot for any downtime alerts
+- Review application submissions
+- Monitor email delivery in Brevo dashboard
+
+### Weekly Tasks
+- Review GitHub Dependabot PRs (security updates)
+- Check MongoDB Atlas storage usage
+- Review Render and Vercel logs for errors
+
+### Monthly Tasks
+- Update npm dependencies
+- Review and archive old applications
+- Check SSL certificate status (auto-renewed)
+- Review free tier limits (MongoDB, Brevo, Render, Vercel)
+
+---
+
+## 💰 Cost Breakdown
+
+| Service | Plan | Cost | Limits |
+|---------|------|------|--------|
+| MongoDB Atlas | M0 Free | $0 | 512MB storage |
+| Render | Free Tier | $0 | 750 hours/month |
+| Vercel | Hobby | $0 | 100GB bandwidth |
+| Brevo | Free | $0 | 300 emails/day |
+| GitHub Actions | Free | $0 | 2000 min/month |
+| UptimeRobot | Free | $0 | 50 monitors |
+| **Total** | | **$0/month** | |
+
+**Upgrade Path:** If you exceed free tiers:
+- MongoDB Atlas: $9/month (M10)
+- Render: $7/month (Starter)
+- Vercel: Free is usually enough
+- Brevo: $25/month (Lite - 10k emails)
+
+---
+
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit changes (`git commit -m 'Add AmazingFeature'`)
+4. Push to branch (`git push origin feature/AmazingFeature`)
+5. Open Pull Request
+
+---
+
+## 📄 License
+
+This project is licensed under the MIT License.
+
+---
+
+## 👥 Authors
+
+- **S N Charanraj** - *Initial work* - [GitHub](https://github.com/sncharanraj)
+
+---
+
+## 🙏 Acknowledgments
+
+- React and Vite documentation
+- Express.js community
+- MongoDB Atlas team
+- Brevo support
+- Render and Vercel platforms
+
+---
+
+## 📞 Support
+
+For support, email your-email@example.com or create an issue in the repository.
+
+---
+
+**Built with ❤️ using modern web technologies**
