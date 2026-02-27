@@ -1,0 +1,257 @@
+{
+  "version": 4,
+  "terraform_version": "1.14.5",
+  "serial": 12,
+  "lineage": "2a51dc3c-7336-a7fb-ae7e-6b73ce2ca294",
+  "outputs": {
+    "cluster_id": {
+      "value": "698579c8b7b03d132b2d6804",
+      "type": "string"
+    },
+    "cluster_name": {
+      "value": "Cluster0",
+      "type": "string"
+    },
+    "database_password": {
+      "value": "7XiM}\u003c%HUBC\u0026qyqL*I!OqvB_K]SKgv:W",
+      "type": "string",
+      "sensitive": true
+    },
+    "mongodb_connection_string": {
+      "value": "mongodb+srv://internship-portal-terraform-user:7XiM}\u003c%HUBC\u0026qyqL*I!OqvB_K]SKgv:W@cluster0.ocr1zhb.mongodb.net",
+      "type": "string",
+      "sensitive": true
+    },
+    "summary": {
+      "value": "    \n✅ Terraform is now managing your MongoDB infrastructure!\n    \nCluster: Cluster0\nNew User: internship-portal-terraform-user\n    \n📋 Get connection string for new user:\nterraform output -raw mongodb_connection_string\n    \n🔐 Get password:\nterraform output -raw database_password\n    \n",
+      "type": "string"
+    },
+    "terraform_user": {
+      "value": "internship-portal-terraform-user",
+      "type": "string"
+    }
+  },
+  "resources": [
+    {
+      "mode": "managed",
+      "type": "mongodbatlas_cluster",
+      "name": "main",
+      "provider": "provider[\"registry.terraform.io/mongodb/mongodbatlas\"]",
+      "instances": [
+        {
+          "schema_version": 1,
+          "attributes": {
+            "accept_data_risks_and_force_replica_set_reconfig": "",
+            "advanced_configuration": [
+              {
+                "change_stream_options_pre_and_post_images_expire_after_seconds": -1,
+                "custom_openssl_cipher_config_tls12": [],
+                "default_max_time_ms": 0,
+                "default_read_concern": "",
+                "default_write_concern": "",
+                "fail_index_key_too_long": false,
+                "javascript_enabled": true,
+                "minimum_enabled_tls_protocol": "TLS1_2",
+                "no_table_scan": false,
+                "oplog_min_retention_hours": 0,
+                "oplog_size_mb": 0,
+                "sample_refresh_interval_bi_connector": 0,
+                "sample_size_bi_connector": 0,
+                "tls_cipher_config_mode": "DEFAULT",
+                "transaction_lifetime_limit_seconds": 0
+              }
+            ],
+            "auto_scaling_compute_enabled": false,
+            "auto_scaling_compute_scale_down_enabled": false,
+            "auto_scaling_disk_gb_enabled": null,
+            "backing_provider_name": "AWS",
+            "backup_enabled": false,
+            "bi_connector_config": [
+              {
+                "enabled": false,
+                "read_preference": "secondary"
+              }
+            ],
+            "cloud_backup": false,
+            "cluster_id": "698579c8b7b03d132b2d6804",
+            "cluster_type": "REPLICASET",
+            "connection_strings": [
+              {
+                "private": "",
+                "private_endpoint": [],
+                "private_srv": "",
+                "standard": "mongodb://ac-lmamf1r-shard-00-00.ocr1zhb.mongodb.net:27017,ac-lmamf1r-shard-00-01.ocr1zhb.mongodb.net:27017,ac-lmamf1r-shard-00-02.ocr1zhb.mongodb.net:27017/?ssl=true\u0026authSource=admin\u0026replicaSet=atlas-ltkocm-shard-0",
+                "standard_srv": "mongodb+srv://cluster0.ocr1zhb.mongodb.net"
+              }
+            ],
+            "container_id": null,
+            "disk_size_gb": 0.5,
+            "encryption_at_rest_provider": "NONE",
+            "id": "Y2x1c3Rlcl9pZA==:Njk4NTc5YzhiN2IwM2QxMzJiMmQ2ODA0-Y2x1c3Rlcl9uYW1l:Q2x1c3RlcjA=-cHJvamVjdF9pZA==:Njk4NTc5NjE3NzE5NDEzMGFhYWY4ZmVh-cHJvdmlkZXJfbmFtZQ==:VEVOQU5U",
+            "labels": [],
+            "mongo_db_major_version": "7.0",
+            "mongo_db_version": "8.0.19",
+            "mongo_uri": "mongodb://ac-lmamf1r-shard-00-00.ocr1zhb.mongodb.net:27017,ac-lmamf1r-shard-00-01.ocr1zhb.mongodb.net:27017,ac-lmamf1r-shard-00-02.ocr1zhb.mongodb.net:27017",
+            "mongo_uri_updated": "2026-02-06T05:19:10Z",
+            "mongo_uri_with_options": "mongodb://ac-lmamf1r-shard-00-00.ocr1zhb.mongodb.net:27017,ac-lmamf1r-shard-00-01.ocr1zhb.mongodb.net:27017,ac-lmamf1r-shard-00-02.ocr1zhb.mongodb.net:27017/?ssl=true\u0026authSource=admin\u0026replicaSet=atlas-ltkocm-shard-0",
+            "name": "Cluster0",
+            "num_shards": 1,
+            "paused": false,
+            "pinned_fcv": [],
+            "pit_enabled": false,
+            "project_id": "6985796177194130aaaf8fea",
+            "provider_auto_scaling_compute_max_instance_size": "",
+            "provider_auto_scaling_compute_min_instance_size": "",
+            "provider_disk_iops": null,
+            "provider_disk_type_name": "",
+            "provider_encrypt_ebs_volume": null,
+            "provider_encrypt_ebs_volume_flag": null,
+            "provider_instance_size_name": "M0",
+            "provider_name": "TENANT",
+            "provider_region_name": "US_EAST_1",
+            "provider_volume_type": "",
+            "redact_client_log_data": false,
+            "replication_factor": 3,
+            "replication_specs": [
+              {
+                "id": "698579c7b7b03d132b2d6722",
+                "num_shards": 1,
+                "regions_config": [
+                  {
+                    "analytics_nodes": 0,
+                    "electable_nodes": 3,
+                    "priority": 7,
+                    "read_only_nodes": 0,
+                    "region_name": "AP_SOUTH_1"
+                  }
+                ],
+                "zone_name": "Zone 1"
+              }
+            ],
+            "retain_backups_enabled": null,
+            "snapshot_backup_policy": [],
+            "srv_address": "mongodb+srv://cluster0.ocr1zhb.mongodb.net",
+            "state_name": "IDLE",
+            "tags": [],
+            "termination_protection_enabled": false,
+            "timeouts": null,
+            "version_release_system": "LTS"
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "eyJlMmJmYjczMC1lY2FhLTExZTYtOGY4OC0zNDM2M2JjN2M0YzAiOnsiY3JlYXRlIjoxMDgwMDAwMDAwMDAwMCwiZGVsZXRlIjoxMDgwMDAwMDAwMDAwMCwidXBkYXRlIjoxMDgwMDAwMDAwMDAwMH0sInNjaGVtYV92ZXJzaW9uIjoiMSJ9"
+        }
+      ]
+    },
+    {
+      "mode": "managed",
+      "type": "mongodbatlas_database_user",
+      "name": "terraform_user",
+      "provider": "provider[\"registry.terraform.io/mongodb/mongodbatlas\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "auth_database_name": "admin",
+            "aws_iam_type": "NONE",
+            "description": null,
+            "id": "YXV0aF9kYXRhYmFzZV9uYW1l:YWRtaW4=-cHJvamVjdF9pZA==:Njk4NTc5NjE3NzE5NDEzMGFhYWY4ZmVh-dXNlcm5hbWU=:aW50ZXJuc2hpcC1wb3J0YWwtdGVycmFmb3JtLXVzZXI=",
+            "labels": [],
+            "ldap_auth_type": "NONE",
+            "oidc_auth_type": "NONE",
+            "password": "7XiM}\u003c%HUBC\u0026qyqL*I!OqvB_K]SKgv:W",
+            "project_id": "6985796177194130aaaf8fea",
+            "roles": [
+              {
+                "collection_name": null,
+                "database_name": "internship-portal",
+                "role_name": "readWrite"
+              }
+            ],
+            "scopes": [],
+            "username": "internship-portal-terraform-user",
+            "x509_type": "NONE"
+          },
+          "sensitive_attributes": [
+            [
+              {
+                "type": "get_attr",
+                "value": "password"
+              }
+            ]
+          ],
+          "identity_schema_version": 0,
+          "dependencies": [
+            "random_password.db_password"
+          ]
+        }
+      ]
+    },
+    {
+      "mode": "managed",
+      "type": "mongodbatlas_project_ip_access_list",
+      "name": "terraform",
+      "provider": "provider[\"registry.terraform.io/mongodb/mongodbatlas\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "aws_security_group": "",
+            "cidr_block": "0.0.0.0/0",
+            "comment": "Managed by Terraform - Allow from anywhere",
+            "id": "ZW50cnk=:MC4wLjAuMC8w-cHJvamVjdF9pZA==:Njk4NTc5NjE3NzE5NDEzMGFhYWY4ZmVh",
+            "ip_address": "",
+            "project_id": "6985796177194130aaaf8fea",
+            "timeouts": null
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0
+        }
+      ]
+    },
+    {
+      "mode": "managed",
+      "type": "random_password",
+      "name": "db_password",
+      "provider": "provider[\"registry.terraform.io/hashicorp/random\"]",
+      "instances": [
+        {
+          "schema_version": 3,
+          "attributes": {
+            "bcrypt_hash": "$2a$10$ewC9uVApjQoY5Z3dPaxEDu9gbCMiAeG94HrtR2V5YuVWY.MEjU.y2",
+            "id": "none",
+            "keepers": null,
+            "length": 32,
+            "lower": true,
+            "min_lower": 0,
+            "min_numeric": 0,
+            "min_special": 0,
+            "min_upper": 0,
+            "number": true,
+            "numeric": true,
+            "override_special": null,
+            "result": "7XiM}\u003c%HUBC\u0026qyqL*I!OqvB_K]SKgv:W",
+            "special": true,
+            "upper": true
+          },
+          "sensitive_attributes": [
+            [
+              {
+                "type": "get_attr",
+                "value": "bcrypt_hash"
+              }
+            ],
+            [
+              {
+                "type": "get_attr",
+                "value": "result"
+              }
+            ]
+          ],
+          "identity_schema_version": 0
+        }
+      ]
+    }
+  ],
+  "check_results": null
+}

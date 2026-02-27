@@ -8,10 +8,23 @@ const { body, validationResult } = require('express-validator');
 const Application = require('./models/Application');
 const { sendStudentEmail, sendAdminEmail } = require('./services/emailService');
 
+// Import metrics
+const { 
+  register, 
+  metricsMiddleware, 
+  trackApplicationSubmission,
+  trackEmailStatus,
+  trackFormError,
+  updateAggregateMetrics
+} = require('./middleware/metrics');
+
 const app = express();
 
 // Security Middleware
 app.use(helmet());
+
+// Metrics Middleware (track all HTTP requests)
+app.use(metricsMiddleware);
 
 // CORS Configuration - Allow all Vercel deployments
 app.use(cors({
@@ -19,6 +32,7 @@ app.use(cors({
     if (!origin) return callback(null, true);
     if (origin.includes('localhost')) return callback(null, true);
     if (origin.includes('vercel.app')) return callback(null, true);
+    if (origin.includes('internship-portal.local')) return callback(null, true);
     console.log('❌ CORS blocked origin:', origin);
     callback(new Error('Not allowed by CORS'));
   },
@@ -45,11 +59,26 @@ app.use('/api/', limiter);
 
 // MongoDB Connection
 mongoose.connect(process.env.MONGODB_URI)
-  .then(() => console.log('✅ MongoDB Connected Successfully'))
+  .then(() => {
+    console.log('✅ MongoDB Connected Successfully');
+    // Initial metrics update
+    updateAggregateMetrics(Application);
+  })
   .catch(err => {
     console.error('❌ MongoDB Connection Error:', err);
     process.exit(1);
   });
+
+// Prometheus Metrics Endpoint
+app.get('/metrics', async (req, res) => {
+  try {
+    res.set('Content-Type', register.contentType);
+    res.end(await register.metrics());
+  } catch (error) {
+    console.error('❌ Metrics error:', error);
+    res.status(500).end();
+  }
+});
 
 // Enhanced Health Check Route
 app.get('/api/health', async (req, res) => {
@@ -72,6 +101,22 @@ app.get('/api/health', async (req, res) => {
 
   const statusCode = healthcheck.status === 'ok' ? 200 : 503;
   res.status(statusCode).json(healthcheck);
+});
+
+// Version endpoint (shows monitoring is active)
+app.get('/api/version', (req, res) => {
+  res.json({
+    version: 'v4.0.0',
+    message: 'Kubernetes + Prometheus Monitoring Active! 🚀',
+    timestamp: new Date().toISOString(),
+    features: [
+      'Business metrics tracking',
+      'Application monitoring',
+      'Email delivery tracking',
+      'Form error analytics',
+      'Real-time Grafana dashboards'
+    ]
+  });
 });
 
 // Validation Rules
@@ -101,6 +146,12 @@ app.post('/api/applications', submitLimiter, applicationValidation, async (req, 
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       console.log('❌ Validation errors:', errors.array());
+      
+      // Track validation errors for monitoring
+      errors.array().forEach(error => {
+        trackFormError(error.path || error.param);
+      });
+      
       return res.status(400).json({
         success: false,
         errors: errors.array()
@@ -121,6 +172,12 @@ app.post('/api/applications', submitLimiter, applicationValidation, async (req, 
     console.log('✅ Application saved to database');
     console.log('📧 Application ID:', application._id);
 
+    // Track application submission in Prometheus
+    trackApplicationSubmission(application);
+    
+    // Update aggregate metrics (applications by status, domain, etc.)
+    updateAggregateMetrics(Application);
+
     console.log('📧 Starting email sending process...');
     console.log('📧 Student email:', application.email);
     console.log('📧 Admin email:', process.env.ADMIN_EMAIL);
@@ -131,11 +188,15 @@ app.post('/api/applications', submitLimiter, applicationValidation, async (req, 
           console.log('✅ Student email sent successfully!');
           console.log('   To:', application.email);
           console.log('   Message ID:', result.messageId);
+          // Track successful email delivery
+          trackEmailStatus('student', 'success');
           return result;
         })
         .catch((err) => {
           console.error('❌ Student email FAILED:', err.message);
           console.error('   Full error:', err);
+          // Track failed email delivery
+          trackEmailStatus('student', 'failure');
           return null;
         }),
 
@@ -144,11 +205,15 @@ app.post('/api/applications', submitLimiter, applicationValidation, async (req, 
           console.log('✅ Admin email sent successfully!');
           console.log('   To:', process.env.ADMIN_EMAIL);
           console.log('   Message ID:', result.messageId);
+          // Track successful email delivery
+          trackEmailStatus('admin', 'success');
           return result;
         })
         .catch((err) => {
           console.error('❌ Admin email FAILED:', err.message);
           console.error('   Full error:', err);
+          // Track failed email delivery
+          trackEmailStatus('admin', 'failure');
           return null;
         })
     ]).then((results) => {
@@ -249,6 +314,13 @@ app.listen(PORT, () => {
   console.log(`🚀 Server running on port ${PORT}`);
   console.log(`📝 Environment: ${process.env.NODE_ENV || 'development'}`);
   console.log(`🌐 CORS enabled for Vercel deployments and localhost`);
+  console.log(`📊 Prometheus metrics: /metrics`);
+  console.log(`🔍 Health check: /api/health`);
+  
+  // Update aggregate metrics every 30 seconds
+  setInterval(() => {
+    updateAggregateMetrics(Application);
+  }, 30000);
 });
 
 module.exports = app;
